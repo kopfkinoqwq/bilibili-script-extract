@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Bilibili 视频文稿与 CC 字幕提取器",
+  "version": "1.0.0",
+  "description": "一键提取 B站 (Bilibili) 视频 CC 字幕、AI 自动字幕与 AI 视频总结大纲，支持导出 TXT、SRT、Markdown、AI Prompt 与 JSON。",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://*.bilibili.com/*",
+    "*://*.hdslb.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "B站文稿与字幕提取器",
+    "default_popup": "src/popup/popup.html"
+  },
+  "commands": {
+    "toggle-panel": {
+      "suggested_key": {
+        "default": "Alt+S",
+        "mac": "Alt+S"
+      },
+      "description": "打开/关闭 B站文稿提取面板"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.bilibili.com/video/*",
+        "*://www.bilibili.com/list/*"
+      ],
+      "js": [
+        "src/utils/formatter.js",
+        "src/content/content-main.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/injected/page-probe.js"
+      ],
+      "matches": [
+        "*://*.bilibili.com/*"
+      ]
+    }
+  ]
+}
